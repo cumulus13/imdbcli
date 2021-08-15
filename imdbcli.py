@@ -83,7 +83,7 @@ class imdbcli(object):
 				if len(str(n)) == 1:
 					number = make_colors("0" + str(n), 'cyan')
 				
-				title = make_colors(str(i.get('long imdb title')), 'white', 'blue')
+				title = make_colors(unidecode(i.get('long imdb title')), 'white', 'blue')
 				ID = make_colors(i.getID(), 'red', 'white')
 				print(number + ". " + title + "[" + ID + "]")
 				n += 1
@@ -109,8 +109,7 @@ class imdbcli(object):
 			else:
 				print(make_colors("No Movie Found !", 'white', 'red', ['blink']))
 		else:
-			raise imdbcli_error(make_colors("No Movie or ID given !", 'white', 'red', ['blink']))
-		
+			raise imdbcli_error(make_colors("No Movie or ID given !", 'white', 'red', ['blink']))	
 			
 	def usage(self):
 		
