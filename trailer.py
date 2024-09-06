@@ -6,10 +6,7 @@ import sys
 
 
 # URL of the IMDb trailer
-url = sys.argv[1]
-if url == 'c':
-	url = clipboard.paste()
-	
+
 # JavaScript code to inject custom CSS
 js_code = """
 const style = document.createElement('style');
@@ -34,7 +31,7 @@ def exit_app(window):
     print("Exiting application...")
     window.destroy()
 
-if __name__ == '__main__':
+def show(url): 
     # Create and configure the browser window
     window = webview.create_window('IMDb Trailer Browser', url, width=720, height=480, resizable=False)
     window.events.loaded += lambda: inject_js(window)  # Inject CSS when the page is loaded
@@ -45,3 +42,9 @@ if __name__ == '__main__':
 
     # Start the webview application in the main thread
     webview.start()
+
+if __name__ == '__main__':
+    url = sys.argv[1]
+    if url == 'c':
+        url = clipboard.paste()    
+    show(url)
