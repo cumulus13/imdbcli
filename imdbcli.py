@@ -17,7 +17,7 @@ try:
 	from . import trailer
 except:
 	import trailer
-	
+from qv import show	
 import clipboard
 from unidecode import unidecode
 from rich import traceback as rich_traceback, console
@@ -143,10 +143,15 @@ class imdbcli(object):
 					data_detail = self.details(idx, download_cover, download_json, download_path)
 					debug(data_detail = data_detail, debug = 1)
 					vkey = list(filter(lambda k: k.lower() == 'videos', list(data_detail.keys())))
+					vf_image = list(filter(lambda k: k.lower() == 'full-size cover url', list(data_detail.keys())))
 					if vkey:
 						data_get = data_detail.get(vkey[0])
 						debug(data_get = data_get, debug = 1)
 						trailer.show(data_get[0])
+					elif vf_image:
+						data_get = data_detail.get(vf_image[0])
+						debug(data_get = data_get)
+						show(vf_image[0])
 					
 		elif id:
 			data = im.get_movie(id)
