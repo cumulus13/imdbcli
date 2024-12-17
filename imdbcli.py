@@ -17,7 +17,7 @@ try:
 	from . import trailer
 except:
 	import trailer
-from qv import show	
+from qvpy import show	
 import clipboard
 from unidecode import unidecode
 from rich import traceback as rich_traceback, console
