@@ -6,12 +6,7 @@ import imdb
 import re
 import argparse
 from make_colors import make_colors
-if any('debug' in i.lower() for i in  os.environ):
-	from pydebugger.debug import debug
-else:
-	def debug(*args, **kwargs):
-		return
-
+from pydebugger.debug import debug
 import download
 try:
 	from . import trailer
@@ -141,12 +136,12 @@ class imdbcli(object):
 						idx = q.strip()[1:]
 						idx = data[int(idx.strip()) - 1].getID()						
 					data_detail = self.details(idx, download_cover, download_json, download_path)
-					debug(data_detail = data_detail, debug = 1)
+					debug(data_detail = data_detail)
 					vkey = list(filter(lambda k: k.lower() == 'videos', list(data_detail.keys())))
 					vf_image = list(filter(lambda k: k.lower() == 'full-size cover url', list(data_detail.keys())))
 					if vkey:
 						data_get = data_detail.get(vkey[0])
-						debug(data_get = data_get, debug = 1)
+						debug(data_get = data_get)
 						trailer.show(data_get[0])
 					elif vf_image:
 						data_get = data_detail.get(vf_image[0])
@@ -169,6 +164,7 @@ class imdbcli(object):
 		
 		MOVIE_NAME = ''
 		parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+		parser.add_argument('MOVIE', help = 'Movie name or you can use "-m"', nargs='?')
 		parser.add_argument('-m', '--movie', action = 'store', help = 'Search by Movie Name')
 		parser.add_argument('-c', '--copy-id', action = 'store_true', help = 'Copy Id to Clipboard')
 		parser.add_argument('-id', '--id', action = 'store', help = 'Search by Movie id, just number without "tt"')
@@ -190,7 +186,11 @@ class imdbcli(object):
 			movie = re.split("\|", movie)
 			debug(movie = movie)
 		else:
-			movie = args.movie
+			movie = args.movie if args.movie else args.MOVIE if args.MOVIE else ''
+		if args.MOVIES and args.MOVIE:
+			movie = [args.MOVIE] + args.MOVIES
+		debug(movie = movie)
+		debug(args = args)
 		if isinstance(movie, list):
 			for i in movie:
 				if i == 'c':
