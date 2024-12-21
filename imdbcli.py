@@ -95,6 +95,10 @@ class imdbcli(object):
 		return data
 		
 	def cli(self, movie = None, id = None, download_cover = False, download_json = False, download_path = 'covers', cover_name = 'Poster', thumb_name = 'Thumb', clip = False):
+		if not movie:
+			console.print(f"[bold #FFFF00]Search Movie:[/] ", end = '')
+			movie = input()
+		console.print(f"[black on #FFFF00]MOVIE Search [CLI]:[/] [bold #00FFFF]{movie if movie else ' --- '}[/]\n")
 		im = imdb.IMDb()
 		if movie:
 			data = im.search_movie(movie)
@@ -128,6 +132,7 @@ class imdbcli(object):
 						clipboard.copy("tt" + str(idx))
 					#print(make_colors("Movie Selected:", 'black', 'yellow'), make_colors(data[int(str(q).strip()) - 1].get('long imdb title'), 'white', 'magenta'))
 					console.print(f"[bold #fffff on #005500]Movie Selected:[/] [black on #ff5500]{data[int(str(q).strip()) - 1].get('long imdb title')}[/]")
+		
 				elif q.strip()[-1] == 't' or q.strip()[0] == 't':
 					if q.strip()[-1] == 't':
 						idx = q.strip()[:-1]
@@ -139,6 +144,7 @@ class imdbcli(object):
 					debug(data_detail = data_detail)
 					vkey = list(filter(lambda k: k.lower() == 'videos', list(data_detail.keys())))
 					vf_image = list(filter(lambda k: k.lower() == 'full-size cover url', list(data_detail.keys())))
+					debug(vf_image = vf_image)
 					if vkey:
 						data_get = data_detail.get(vkey[0])
 						debug(data_get = data_get)
@@ -146,7 +152,11 @@ class imdbcli(object):
 					elif vf_image:
 						data_get = data_detail.get(vf_image[0])
 						debug(data_get = data_get)
-						show(vf_image[0])
+						show(data_get)
+				elif q in ['q', 'x', 'exit', 'quit']:
+					console.print(f"[white on red blink]Exit ...[/]")
+					sys.exit(0)
+				return self.cli(None, id, download_cover, download_json, download_path, cover_name, thumb_name)
 					
 		elif id:
 			data = im.get_movie(id)
@@ -191,11 +201,11 @@ class imdbcli(object):
 			movie = [args.MOVIE] + args.MOVIES
 		debug(movie = movie)
 		debug(args = args)
+		console.print(f"[black on #00FFFF]MOVIE Search:[/] [bold #FFFF00]{' '.join(movie) if movie else ' --- '}[/]\n")
 		if isinstance(movie, list):
-			for i in movie:
-				if i == 'c':
-					i = clipboard.paste()
-				self.cli(i, args.id, args.download_cover, args.download, args.download_path, args.cover_name, args.thumb_name, args.copy_id)
+			movies = " ".join([clipboard.paste() if i == 'c' else i for i in movie])
+			debug(movies = movies)
+			self.cli(movies, args.id, args.download_cover, args.download, args.download_path, args.cover_name, args.thumb_name, args.copy_id)
 		else:
 			if movie == 'c':
 				movie = clipboard.paste()
