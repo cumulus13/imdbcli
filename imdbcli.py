@@ -159,6 +159,7 @@ class imdbcli(object):
 				return self.cli(None, id, download_cover, download_json, download_path, cover_name, thumb_name)
 					
 		elif id:
+			if str(id).strip() in ['x', 'q', 'exit', 'quit']: sys.exit()
 			data = im.get_movie(id)
 			if data:
 				self.details(id, download_cover, download_json, download_path)
@@ -205,10 +206,12 @@ class imdbcli(object):
 		if isinstance(movie, list):
 			movies = " ".join([clipboard.paste() if i == 'c' else i for i in movie])
 			debug(movies = movies)
+			if movies.strip() in ['x', 'q', 'exit', 'quit']: sys.exit()
 			self.cli(movies, args.id, args.download_cover, args.download, args.download_path, args.cover_name, args.thumb_name, args.copy_id)
 		else:
 			if movie == 'c':
 				movie = clipboard.paste()
+			if movies.strip() in ['x', 'q', 'exit', 'quit']: sys.exit()
 			self.cli(movie, args.id, args.download_cover, args.download, args.download_path, args.cover_name, args.thumb_name, args.copy_id)
 			
 if __name__ == '__main__':
